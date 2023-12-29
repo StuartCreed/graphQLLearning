@@ -11,17 +11,20 @@ const companies = [
     {
         id: '89jfdsdfds89',
         name: 'Thovex',
-        description: 'Landsearch company'
+        description: 'Landsearch company',
+        ownerId: '560895435h30'
     },
     {
         id: '560895435h30',
         name: 'Poole Bay Holdings',
-        description: 'Micro website company'
+        description: 'Micro website company',
+        ownerId: '560895435h30'
     },
     {
         id: '78908354jdf8',
         name: 'Halo',
-        description: 'Event security company'
+        description: 'Event security company',
+        ownerId: '560895435h30'
     },
 ]
 
@@ -40,7 +43,7 @@ const users = [
     },
     {
         id: '560895435h30',
-        firstName: 'Rickard',
+        firstName: 'Callum',
         age: 31,
         companyId: '78908354jdf8'
     },
@@ -48,11 +51,18 @@ const users = [
 
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
-    fields: {
+    fields: () => ({
         id: { type: GraphQLString },
         name: { type: GraphQLString } ,
-        description: { type: GraphQLString }
-    }
+        description: { type: GraphQLString },
+        owner: {
+            type: UserType,
+            resolve(parentValue, args) {
+                console.log('CompanyType', parentValue, args)
+                return users.find(u => u.id === parentValue.ownerId)
+            }
+        }
+    })
 })
 
 const UserType = new GraphQLObjectType({
@@ -84,8 +94,6 @@ const UserQuery = new GraphQLObjectType({
         }
     }
 })
-
-
 
 module.exports = new GraphQLSchema({
     query: UserQuery,
