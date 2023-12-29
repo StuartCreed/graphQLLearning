@@ -1,6 +1,4 @@
 const graphql = require('graphql')
-const _ = require('lodash')
-const axios = require('axios').default
 
 const {
     GraphQLObjectType,
@@ -8,6 +6,45 @@ const {
     GraphQLInt,
     GraphQLSchema
 } = graphql
+
+const companies = [
+    {
+        id: '89jfdsdfds89',
+        name: 'Thovex',
+        description: 'Landsearch company'
+    },
+    {
+        id: '560895435h30',
+        name: 'Poole Bay Holdings',
+        description: 'Micro website company'
+    },
+    {
+        id: '78908354jdf8',
+        name: 'Halo',
+        description: 'Event security company'
+    },
+]
+
+const users = [
+    {
+        id: '7843r34900io',
+        firstName: 'Stuart',
+        age: 89,
+        companyId: '89jfdsdfds89'
+    },
+    {
+        id: '7843r34900io',
+        firstName: 'Alastair',
+        age: 56,
+        companyId: '89jfdsdfds89'
+    },
+    {
+        id: '560895435h30',
+        firstName: 'Rickard',
+        age: 31,
+        companyId: '78908354jdf8'
+    },
+]
 
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
@@ -27,21 +64,22 @@ const UserType = new GraphQLObjectType({
         company: { 
             type: CompanyType,
             resolve(parentValue, args) {
-                console.log(parentValue)
-                return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`).then(r => r.data)
+                console.log('UserType', parentValue, args)
+                return companies.find(c => c.id === parentValue.companyId)
             }
          }
     }
 })
 
-const RootQuery = new GraphQLObjectType({
+const UserQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
         user: {
             type: UserType,
             args: { id: { type: GraphQLString }},
             resolve(parentValue, args) {
-                return axios.get('http://localhost:3000/users').then(r => _.find(r.data, {id: args.id }))
+                console.log('RootQueryType', parentValue, args)
+                return users.find(u => u.id === args.id)
             }
         }
     }
@@ -50,5 +88,5 @@ const RootQuery = new GraphQLObjectType({
 
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: UserQuery,
 })
