@@ -81,7 +81,7 @@ const UserType = new GraphQLObjectType({
     }
 })
 
-const UserQuery = new GraphQLObjectType({
+const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
         user: {
@@ -91,10 +91,21 @@ const UserQuery = new GraphQLObjectType({
                 console.log('RootQueryType', parentValue, args)
                 return users.find(u => u.id === args.id)
             }
+        },
+        company: {
+            type: CompanyType,
+            args: {
+                id: {
+                    type: GraphQLString
+                }
+            },
+            resolve(parentValue, args) {
+                return companies.find(c => c.id = args.id)
+            }
         }
     }
 })
 
 module.exports = new GraphQLSchema({
-    query: UserQuery,
+    query: RootQuery,
 })
