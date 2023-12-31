@@ -1,7 +1,7 @@
 example query in graphiQL:
 ```
 {
-    user(id: "7843r34900io") {
+    findUserById(id: "7843r34900io") {
         firstName,
         company {
             id,
@@ -22,7 +22,7 @@ You can put the type in a callback
 Example of nested query:
 ```
 {
-  user(id: "7843r34900io") {
+  findUserById(id: "7843r34900io") {
     firstName,
     company {
       id,
@@ -50,7 +50,7 @@ Though in the case of search pages for example keep the end point generic and pa
 otherwise there will be too many endpoints!
 ```
 query {
-  user(id: "7843r34900io") {
+  findUserById(id: "7843r34900io") {
     firstName,
     company {
       id,
@@ -75,5 +75,9 @@ query {
   findCompanyByOwnerId(id: "89jfdsdfds89") {
     name
   },
+  findUsersByCompanyName(name: "Halo") {
+    id,
+    firstName
+  }
 }
 ```
