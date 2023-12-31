@@ -24,7 +24,7 @@ const companies = [
         id: '78908354jdf8',
         name: 'Halo',
         description: 'Event security company',
-        ownerId: '560895435h30'
+        ownerId: '89jfdsdfds89'
     },
 ]
 
@@ -92,15 +92,22 @@ const RootQuery = new GraphQLObjectType({
                 return users.find(u => u.id === args.id)
             }
         },
-        company: {
+        findCompanyById: {
             type: CompanyType,
             args: {
-                id: {
-                    type: GraphQLString
-                }
+                id: { type: GraphQLString },
             },
             resolve(parentValue, args) {
-                return companies.find(c => c.id = args.id)
+                return companies.find(c => c.id === args.id)
+            }
+        },
+        findCompanyByOwnerId: {
+            type: CompanyType,
+            args: {
+                id: { type: GraphQLString },
+            },
+            resolve(parentValue, args) {
+                return companies.find(c => c.ownerId === args.id)
             }
         }
     }
