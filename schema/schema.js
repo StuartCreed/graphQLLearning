@@ -1,4 +1,5 @@
 const graphql = require('graphql')
+const _ = require("lodash");
 
 const {
     GraphQLObjectType,
@@ -8,7 +9,7 @@ const {
     GraphQLList
 } = graphql
 
-const companies = [
+let companies = [
     {
         id: '89jfdsdfds89',
         name: 'Thovex',
@@ -29,7 +30,7 @@ const companies = [
     },
 ]
 
-const users = [
+let users = [
     {
         id: '7843r34900io',
         firstName: 'Stuart',
@@ -80,8 +81,8 @@ const UserType = new GraphQLObjectType({
     }
 })
 
-const RootQuery = new GraphQLObjectType({
-    name: 'RootQueryType',
+const queries = new GraphQLObjectType({
+    name: 'Queries',
     fields: {
         findUserById: {
             type: UserType,
@@ -119,10 +120,35 @@ const RootQuery = new GraphQLObjectType({
                     return userCompany.name === args.name
                 })
             }
-        }
+        },
+    },
+})
+
+const mutations = new GraphQLObjectType({
+    name: 'Mutations',
+    fields: {
+        addCompany: {
+            type: CompanyType,
+            args: {
+                name: { type: GraphQLString },
+                description: { type: GraphQLString },
+                ownerId: { type: GraphQLString }
+            },
+            resolve(parentValue, args) {
+                const newCompany = {
+                    id: _.random(1000000000000),
+                    name: args.name,
+                    description: args.description,
+                    ownerId: args.ownerId
+                }
+                companies.push(newCompany)
+                return newCompany
+            }
+        },
     }
 })
 
 module.exports = new GraphQLSchema({
-    query: RootQuery,
+    query: queries,
+    mutation: mutations
 })

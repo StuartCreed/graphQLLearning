@@ -81,3 +81,15 @@ query {
   }
 }
 ```
+
+Other examples:
+https://stackoverflow.com/questions/42882777/schema-is-not-configured-for-mutations
+
+Example mutation:
+```
+mutation {
+  addCompany(name: "CIMPA", description: "PLM company", ownerId: "89jfdsdfds89") {
+  	id
+	}
+}
+```
