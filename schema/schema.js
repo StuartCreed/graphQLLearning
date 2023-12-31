@@ -4,7 +4,8 @@ const {
     GraphQLObjectType,
     GraphQLString,
     GraphQLInt,
-    GraphQLSchema
+    GraphQLSchema,
+    GraphQLList
 } = graphql
 
 const companies = [
@@ -58,7 +59,6 @@ const CompanyType = new GraphQLObjectType({
         owner: {
             type: UserType,
             resolve(parentValue, args) {
-                console.log('CompanyType', parentValue, args)
                 return users.find(u => u.id === parentValue.ownerId)
             }
         }
@@ -74,7 +74,6 @@ const UserType = new GraphQLObjectType({
         company: { 
             type: CompanyType,
             resolve(parentValue, args) {
-                console.log('UserType', parentValue, args)
                 return companies.find(c => c.id === parentValue.companyId)
             }
          }
@@ -84,11 +83,10 @@ const UserType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        user: {
+        findUserById: {
             type: UserType,
             args: { id: { type: GraphQLString }},
             resolve(parentValue, args) {
-                console.log('RootQueryType', parentValue, args)
                 return users.find(u => u.id === args.id)
             }
         },
@@ -108,6 +106,18 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parentValue, args) {
                 return companies.find(c => c.ownerId === args.id)
+            }
+        },
+        findUsersByCompanyName: {
+            type: new GraphQLList(UserType),
+            args: {
+                name: { type: GraphQLString },
+            },
+            resolve(parentValue, args) {
+                return users.filter(user => {
+                    const userCompany = companies.find(company => company.id === user.companyId)
+                    return userCompany.name === args.name
+                })
             }
         }
     }
