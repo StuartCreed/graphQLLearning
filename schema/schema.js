@@ -15,16 +15,16 @@ let companies = [
         id: '89jfdsdfds89',
         name: 'Thovex',
         description: 'Landsearch company',
-        ownerId: '560895435h30'
+        ownerId: 'qftgtefds8dj80'
     },
     {
         id: '560895435h30',
         name: 'Poole Bay Holdings',
         description: 'Micro website company',
-        ownerId: '560895435h30'
+        ownerId: 'qftgtefds8dj80'
     },
     {
-        id: '78908354jdf8',
+        id: '88908354jdf8',
         name: 'Halo',
         description: 'Event security company',
         ownerId: '7843r34900io'
@@ -39,16 +39,16 @@ let users = [
         companyId: '89jfdsdfds89'
     },
     {
-        id: '7843r34900io',
+        id: 'dsfsd349sdfd9',
         firstName: 'Alastair',
         age: 56,
         companyId: '89jfdsdfds89'
     },
     {
-        id: '560895435h30',
+        id: 'qftgtefds8dj80',
         firstName: 'Callum',
         age: 31,
-        companyId: '78908354jdf8'
+        companyId: '88908354jdf8'
     },
 ]
 
