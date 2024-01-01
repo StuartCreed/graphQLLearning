@@ -76,7 +76,7 @@ query {
   findCompanyById(id: "560895435h30") {
     name
   },
-  findCompanyByOwnerId(id: "89jfdsdfds89") {
+  findCompanyByOwnerId(id: "qftgtefds8dj80") {
     name
   },
   findUsersByCompanyName(name: "Halo") {
