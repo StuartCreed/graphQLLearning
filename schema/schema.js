@@ -6,7 +6,8 @@ const {
     GraphQLString,
     GraphQLInt,
     GraphQLSchema,
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull
 } = graphql
 
 let companies = [
@@ -26,7 +27,7 @@ let companies = [
         id: '78908354jdf8',
         name: 'Halo',
         description: 'Event security company',
-        ownerId: '89jfdsdfds89'
+        ownerId: '7843r34900io'
     },
 ]
 
@@ -54,11 +55,11 @@ let users = [
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
     fields: () => ({
-        id: { type: GraphQLString },
-        name: { type: GraphQLString } ,
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) } ,
         description: { type: GraphQLString },
         owner: {
-            type: UserType,
+            type: new GraphQLNonNull(UserType),
             resolve(parentValue, args) {
                 return users.find(u => u.id === parentValue.ownerId)
             }
@@ -69,11 +70,11 @@ const CompanyType = new GraphQLObjectType({
 const UserType = new GraphQLObjectType({
     name: 'User',
     fields: {
-        id: { type: GraphQLString },
-        firstName: { type: GraphQLString } ,
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        firstName: { type: new GraphQLNonNull(GraphQLString) } ,
         age: { type: GraphQLInt },
         company: { 
-            type: CompanyType,
+            type: new GraphQLNonNull(CompanyType),
             resolve(parentValue, args) {
                 return companies.find(c => c.id === parentValue.companyId)
             }
@@ -86,7 +87,7 @@ const queries = new GraphQLObjectType({
     fields: {
         findUserById: {
             type: UserType,
-            args: { id: { type: GraphQLString }},
+            args: { id: { type: new GraphQLNonNull(GraphQLString) }},
             resolve(parentValue, args) {
                 return users.find(u => u.id === args.id)
             }
@@ -94,7 +95,7 @@ const queries = new GraphQLObjectType({
         findCompanyById: {
             type: CompanyType,
             args: {
-                id: { type: GraphQLString },
+                id: { type: new GraphQLNonNull(GraphQLString) },
             },
             resolve(parentValue, args) {
                 return companies.find(c => c.id === args.id)
@@ -103,7 +104,7 @@ const queries = new GraphQLObjectType({
         findCompanyByOwnerId: {
             type: CompanyType,
             args: {
-                id: { type: GraphQLString },
+                id: { type: new GraphQLNonNull(GraphQLString) },
             },
             resolve(parentValue, args) {
                 return companies.find(c => c.ownerId === args.id)
@@ -112,7 +113,7 @@ const queries = new GraphQLObjectType({
         findUsersByCompanyName: {
             type: new GraphQLList(UserType),
             args: {
-                name: { type: GraphQLString },
+                name: { type: new GraphQLNonNull(GraphQLString) },
             },
             resolve(parentValue, args) {
                 return users.filter(user => {
@@ -130,9 +131,9 @@ const mutations = new GraphQLObjectType({
         addCompany: {
             type: CompanyType,
             args: {
-                name: { type: GraphQLString },
+                name: { type: new GraphQLNonNull(GraphQLString) },
                 description: { type: GraphQLString },
-                ownerId: { type: GraphQLString }
+                ownerId: { type: new GraphQLNonNull(GraphQLString) }
             },
             resolve(parentValue, args) {
                 const newCompany = {
