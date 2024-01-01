@@ -66,8 +66,8 @@ fragment companyInfo on Company {
   }
 }
 
-query {
-  findUserById(id: "7843r34900io") {
+query LoggedInUserInfo($loggedInUserId: String!) {
+  findUserById(id: $loggedInUserId) {
     firstName,
     company {
       ...companyInfo
@@ -76,7 +76,7 @@ query {
   findCompanyById(id: "560895435h30") {
     name
   },
-  findCompanyByOwnerId(id: "qftgtefds8dj80") {
+  findCompanyByOwnerId(id: $loggedInUserId) {
     name
   },
   findUsersByCompanyName(name: "Halo") {
@@ -86,6 +86,27 @@ query {
       ...companyInfo
     }
   }
+}
+
+query OtherQueries {
+  findCompanyById(id: "560895435h30") {
+    name
+  },
+  findUsersByCompanyName(name: "Halo") {
+    id,
+    firstName,
+    company {
+      ...companyInfo
+    }
+  }
+}
+```
+
+with variable:
+
+```
+{
+  "loggedInUserId": "qftgtefds8dj80"
 }
 ```
 
