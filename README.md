@@ -73,19 +73,9 @@ query LoggedInUserInfo($loggedInUserId: String!) {
       ...companyInfo
     }
   },
-  findCompanyById(id: "560895435h30") {
-    name
-  },
   findCompanyByOwnerId(id: $loggedInUserId) {
     name
   },
-  findUsersByCompanyName(name: "Halo") {
-    id,
-    firstName,
-    company {
-      ...companyInfo
-    }
-  }
 }
 
 query OtherQueries {
