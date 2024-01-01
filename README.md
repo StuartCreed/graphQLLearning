@@ -66,10 +66,10 @@ fragment companyInfo on Company {
   }
 }
 
-query LoggedInUserInfo($loggedInUserId: String!) {
+query LoggedInUserInfo($loggedInUserId: String!, $includeCompany: Boolean!) {
   findUserById(id: $loggedInUserId) {
     firstName,
-    company {
+    company @include(if: $includeCompany) {
       ...companyInfo
     }
   },
@@ -96,7 +96,8 @@ with variable:
 
 ```
 {
-  "loggedInUserId": "qftgtefds8dj80"
+  "loggedInUserId": "qftgtefds8dj80",
+  "includeCompany": true
 }
 ```
 
