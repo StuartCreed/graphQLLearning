@@ -7,7 +7,8 @@ const {
     GraphQLInt,
     GraphQLSchema,
     GraphQLList,
-    GraphQLNonNull
+    GraphQLNonNull,
+    GraphQLEnumType
 } = graphql
 
 let companies = [
@@ -15,19 +16,22 @@ let companies = [
         id: '89jfdsdfds89',
         name: 'Thovex',
         description: 'Landsearch company',
-        ownerId: 'qftgtefds8dj80'
+        ownerId: 'qftgtefds8dj80',
+        field: 0
     },
     {
         id: '560895435h30',
         name: 'Poole Bay Holdings',
         description: 'Micro website company',
-        ownerId: 'qftgtefds8dj80'
+        ownerId: 'qftgtefds8dj80',
+        field: 1
     },
     {
         id: '88908354jdf8',
         name: 'Halo',
         description: 'Event security company',
-        ownerId: '7843r34900io'
+        ownerId: '7843r34900io',
+        field: 1
     },
 ]
 
@@ -36,18 +40,21 @@ let users = [
         id: '7843r34900io',
         firstName: 'Stuart',
         age: 89,
+        profession: 0,
         companyId: '89jfdsdfds89'
     },
     {
         id: 'dsfsd349sdfd9',
         firstName: 'Alastair',
         age: 56,
+        profession: 1,
         companyId: '89jfdsdfds89'
     },
     {
         id: 'qftgtefds8dj80',
         firstName: 'Callum',
         age: 31,
+        profession: 2,
         companyId: '88908354jdf8'
     },
 ]
@@ -58,6 +65,15 @@ const CompanyType = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: new GraphQLNonNull(GraphQLString) } ,
         description: { type: GraphQLString },
+        field: {
+            type: new GraphQLNonNull(new GraphQLEnumType({
+                name: 'Field',
+                values: {
+                    'land': { value: 0 },
+                    'tech': { value:  1 },
+                }
+            }))
+        },
         owner: {
             type: new GraphQLNonNull(UserType),
             resolve(parentValue, args) {
@@ -67,12 +83,24 @@ const CompanyType = new GraphQLObjectType({
     })
 })
 
+const ProfessionEnumType = new GraphQLEnumType({
+    name: 'Profession',
+    values: {
+        'Designer': { value: 0 },
+        'Manager': { value:  1 },
+        'Developer': { value: 2 }
+    }
+})
+
 const UserType = new GraphQLObjectType({
     name: 'User',
     fields: {
         id: { type: new GraphQLNonNull(GraphQLString) },
         firstName: { type: new GraphQLNonNull(GraphQLString) } ,
         age: { type: GraphQLInt },
+        profession: {
+            type: new GraphQLNonNull(ProfessionEnumType)
+        },
         company: { 
             type: new GraphQLNonNull(CompanyType),
             resolve(parentValue, args) {
@@ -133,14 +161,16 @@ const mutations = new GraphQLObjectType({
             args: {
                 name: { type: new GraphQLNonNull(GraphQLString) },
                 description: { type: GraphQLString },
-                ownerId: { type: new GraphQLNonNull(GraphQLString) }
+                ownerId: { type: new GraphQLNonNull(GraphQLString) },
+                profession: { type: new GraphQLNonNull(ProfessionEnumType) }
             },
             resolve(parentValue, args) {
                 const newCompany = {
                     id: _.random(1000000000000),
                     name: args.name,
                     description: args.description,
-                    ownerId: args.ownerId
+                    ownerId: args.ownerId,
+                    profession: args.profession
                 }
                 companies.push(newCompany)
                 return newCompany

@@ -1,3 +1,6 @@
+API help:
+https://graphql-js.org/api
+
 example query in graphiQL:
 ```
 {
@@ -52,9 +55,11 @@ otherwise there will be too many endpoints!
 fragment companyInfo on Company {
   id,
   name,
+  field,
   owner {
     id,
     firstName,
+    profession,
     company {
       name
       owner {
@@ -101,10 +106,10 @@ with variable:
 }
 ```
 
-Example mutation:
+Example mutation (with an enum as the profession):
 ```
 mutation {
-  addCompany(name: "CIMPA", description: "PLM company", ownerId: "89jfdsdfds89") {
+  addCompany(name: "CIMPA", description: "PLM company", ownerId: "560895435h30", profession: Designer) {
   	id
 	}
 }
