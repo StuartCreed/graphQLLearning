@@ -49,24 +49,28 @@ Keep the endpoints simple, as a rule of thumb make more endpoints where possible
 Though in the case of search pages for example keep the end point generic and pass in parameters, 
 otherwise there will be too many endpoints!
 ```
+fragment companyInfo on Company {
+  id,
+  name,
+  owner {
+    id,
+    firstName,
+    company {
+      name
+      owner {
+        company {
+          name
+        }
+      }
+    }
+  }
+}
+
 query {
   findUserById(id: "7843r34900io") {
     firstName,
     company {
-      id,
-      name,
-      owner {
-        id,
-        firstName,
-      	company {
-          name
-          owner {
-            company {
-              name
-            }
-          }
-        }
-      }
+      ...companyInfo
     }
   },
   findCompanyById(id: "560895435h30") {
@@ -77,13 +81,13 @@ query {
   },
   findUsersByCompanyName(name: "Halo") {
     id,
-    firstName
+    firstName,
+    company {
+      ...companyInfo
+    }
   }
 }
 ```
-
-Other examples:
-https://stackoverflow.com/questions/42882777/schema-is-not-configured-for-mutations
 
 Example mutation:
 ```
